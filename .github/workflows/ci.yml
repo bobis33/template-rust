@@ -1,0 +1,56 @@
+name: 'CI - template-rust'
+run-name: 'template-rust - "${{ github.ref_name }}"'
+permissions:
+  contents: read
+on:
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ''
+    if: github.actor != 'dependabot[bot]'
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+          - os: ubuntu-24.04
+            shell: bash
+
+          - os: macos-15
+            shell: bash
+
+          - os: windows-2025
+            shell: powershell
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.shell }}
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v6.0.1
+        with:
+          ref: ${{ github.ref }}
+          repository: '${{ github.repository }}'
+          fetch-depth: 1
+          submodules: recursive
+
+      - name: 'Cache cargo'
+        uses: actions/cache@v5.0.4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: build-${{ matrix.os }}-${{ hashFiles('**/Cargo.toml') }}
+
+      - name: 'Build'
+        run: cargo check
+
+      - name: 'Run tests'
+        run: cargo test

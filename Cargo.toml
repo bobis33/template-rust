@@ -1,0 +1,41 @@
+[workspace]
+members = [
+    "crates/*",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.0.1"
+description = ""
+edition = "2024"
+authors = []
+readme = "README.md"
+license = ""
+license-file = "LICENSE.md"
+homepage = ""
+repository = "https://github.com/"
+documentation = ""
+keywords = []
+include = []
+exclude = []
+publish = false
+rust-version = "1.93.0"
+
+[workspace.dependencies]
+
+crate1 = { path = "crates/crate1" }
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
+nursery = "warn"
+
+[workspace.lints.rust]
+missing_docs = "warn"
+unsafe_code = "warn"
+unused_crate_dependencies = "warn"
+unused_extern_crates = "warn"
+unused_import_braces = "warn"
+unused_lifetimes = "warn"
+unused_macro_rules = "warn"
+unused_qualifications = "warn"
